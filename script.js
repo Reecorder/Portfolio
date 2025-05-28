@@ -269,3 +269,47 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(typeWriter, 500);
     }
 });
+
+// Add this to your existing DOMContentLoaded event listener
+// Mobile menu close when clicking outside
+document.addEventListener('click', function(e) {
+    const navMenu = document.querySelector('nav ul');
+    const hamburger = document.querySelector('.hamburger');
+    
+    if (navMenu.classList.contains('show') && 
+        !e.target.closest('nav ul') && 
+        !e.target.closest('.hamburger')) {
+        navMenu.classList.remove('show');
+        hamburger.classList.remove('active');
+    }
+});
+
+// Add touch swipe detection for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const navMenu = document.querySelector('nav ul');
+    const hamburger = document.querySelector('.hamburger');
+    
+    // Left swipe (close menu)
+    if (touchStartX - touchEndX > 50 && navMenu.classList.contains('show')) {
+        navMenu.classList.remove('show');
+        hamburger.classList.remove('active');
+    }
+    
+    // Right swipe (open menu)
+    if (touchEndX - touchStartX > 50 && !navMenu.classList.contains('show')) {
+        navMenu.classList.add('show');
+        hamburger.classList.add('active');
+    }
+}
